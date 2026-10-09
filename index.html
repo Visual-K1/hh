@@ -1,36 +1,688 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>CareCompass — Make sense of your medical bill</title>
-<style>
-:root{color-scheme:light dark;--bg:light-dark(#f6f8f7,#101816);--surface:light-dark(#ffffff,#19221f);--surface2:light-dark(#eef4f0,#202d28);--ink:light-dark(#152923,#edf5f0);--muted:light-dark(#65766f,#a9b9b1);--line:light-dark(#dce6df,#34443d);--green:light-dark(#176b50,#67d6a8);--green2:light-dark(#e0f4e9,#203e31);--lime:#c9f27b;--warn:light-dark(#fff1d9,#45351f);--shadow:0 18px 55px #0b241411}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.5}button,input{font:inherit}button{cursor:pointer}.app{min-height:100vh;background:var(--bg)}.wrap{width:min(1120px,calc(100% - 40px));margin:auto}.nav{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.5px}.mark{width:36px;height:36px;border-radius:12px;background:var(--green);display:grid;place-items:center;color:#fff;font-weight:900;font-size:21px}.brand span{font-size:19px}.navlinks{display:flex;align-items:center;gap:28px}.navlinks a{color:var(--muted);text-decoration:none;font-size:14px}.navlinks a:hover{color:var(--ink)}.btn{border:0;border-radius:12px;padding:12px 18px;background:var(--green);color:white;font-weight:750;box-shadow:0 6px 18px #176b5020;transition:transform .18s,opacity .18s}.btn:hover{transform:translateY(-1px);opacity:.94}.btn.secondary{background:var(--surface);border:1px solid var(--line);color:var(--ink);box-shadow:none}.btn.lime{background:var(--lime);color:#20351d}.hero{padding:72px 0 62px;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--green2);color:var(--green);border:1px solid var(--line);padding:7px 11px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase}.dot{width:7px;height:7px;background:var(--green);border-radius:50%}h1{font-size:clamp(42px,5vw,66px);letter-spacing:-.055em;line-height:1.03;margin:22px 0 20px;max-width:640px}h1 em{font-style:normal;color:var(--green)}.lead{font-size:18px;line-height:1.7;color:var(--muted);max-width:570px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.trust{display:flex;gap:18px;flex-wrap:wrap;margin-top:26px;color:var(--muted);font-size:12px}.trust span{display:flex;align-items:center;gap:6px}.check{color:var(--green);font-weight:900}.demo-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}.demo-card:before{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:var(--green2);right:-70px;top:-75px;opacity:.8}.card-top{position:relative;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.smallcaps{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}.pill{font-size:11px;padding:6px 9px;border-radius:8px;background:var(--green2);color:var(--green);font-weight:800}.bill{border:1px solid var(--line);border-radius:16px;padding:17px;position:relative;background:var(--bg)}.bill-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.bill-head strong{font-size:15px}.bill-head small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.amount{text-align:right;font-size:22px;font-weight:850;letter-spacing:-.04em}.amount small{display:block;font-size:10px;letter-spacing:0;color:var(--muted);font-weight:600}.bill-line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}.bill-line:last-child{border:0}.bill-line span{color:var(--muted)}.flag{display:flex;gap:12px;align-items:flex-start;padding:13px;margin-top:12px;border-radius:13px;background:var(--warn);font-size:12px}.flag-icon{width:25px;height:25px;display:grid;place-items:center;background:#f1c46e33;border-radius:8px;flex-shrink:0}.flag strong{display:block;margin-bottom:2px}.flag p{margin:0;color:var(--muted)}.section{padding:70px 0}.section.alt{background:var(--surface2)}.section-head{max-width:680px;margin-bottom:32px}.section-head h2{font-size:clamp(30px,3.8vw,44px);line-height:1.12;letter-spacing:-.04em;margin:12px 0}.section-head p{color:var(--muted);font-size:16px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.feature{padding:23px;background:var(--surface);border:1px solid var(--line);border-radius:18px}.feature .ico{width:43px;height:43px;border-radius:13px;display:grid;place-items:center;background:var(--green2);font-size:21px;margin-bottom:18px}.feature h3{margin:0 0 8px;font-size:17px}.feature p{color:var(--muted);font-size:14px;margin:0}.workgrid{display:grid;grid-template-columns:.85fr 1.15fr;gap:28px;align-items:start}.steps{display:grid;gap:13px}.step{display:flex;gap:14px;padding:16px;border:1px solid var(--line);border-radius:15px;background:var(--surface)}.num{width:32px;height:32px;border-radius:10px;background:var(--green2);color:var(--green);font-weight:900;display:grid;place-items:center;flex-shrink:0}.step h3{font-size:15px;margin:0 0 4px}.step p{margin:0;color:var(--muted);font-size:13px}.audit{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}.audit h3{margin:0 0 4px}.audit .sub{font-size:12px;color:var(--muted);margin:0 0 18px}.dropzone{border:1.5px dashed light-dark(#a9c5b5,#49685a);border-radius:15px;padding:25px 18px;text-align:center;background:var(--bg);transition:.2s}.dropzone.drag{border-color:var(--green);background:var(--green2)}.upload-icon{font-size:27px;margin-bottom:5px}.dropzone p{margin:5px 0;color:var(--muted);font-size:12px}.file-input{display:none}.selected-file{display:none;text-align:left;margin-top:12px;padding:10px;background:var(--green2);border-radius:10px;font-size:12px;color:var(--green)}.audit-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700}.field input{width:100%;padding:10px 11px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;outline:none}.field input:focus{border-color:var(--green)}.full{width:100%}.notice{font-size:11px;color:var(--muted);margin:12px 0 0;line-height:1.6}.results{display:none;margin-top:18px;border-top:1px solid var(--line);padding-top:18px}.result-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.result-head h4{margin:0}.finding{margin-top:10px;border:1px solid var(--line);padding:12px;border-radius:12px;font-size:12px}.finding b{display:block;margin-bottom:3px}.finding p{margin:0;color:var(--muted)}.result-note{padding:11px;border-radius:10px;background:var(--warn);font-size:11px;color:var(--muted);margin-top:12px}.letter{white-space:pre-wrap;font-size:12px;line-height:1.7;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:12px;max-height:280px;overflow:auto}.metricrow{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.metric{padding:19px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}.metric strong{font-size:26px;letter-spacing:-.04em;display:block}.metric span{font-size:12px;color:var(--muted)}.metric em{font-style:normal;color:var(--green)}.pricing{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:800px}.pricecard{padding:25px;border-radius:20px;border:1px solid var(--line);background:var(--surface)}.pricecard.featured{border-color:var(--green);box-shadow:var(--shadow)}.price{font-size:36px;letter-spacing:-.05em;font-weight:850;margin:12px 0 2px}.price small{font-size:13px;color:var(--muted);letter-spacing:0;font-weight:600}.pricecard p{font-size:13px;color:var(--muted)}.pricecard ul{padding-left:18px;font-size:13px;color:var(--muted);line-height:2}.footer{padding:30px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.footerin{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.disclaimer{font-size:11px;color:var(--muted);max-width:800px;margin-top:15px}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:12px 17px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:9}.toast.show{opacity:1;transform:translate(-50%,0)}@media(max-width:800px){.hero{grid-template-columns:1fr;padding-top:48px;gap:32px}.navlinks a:not(.navcta){display:none}.grid3{grid-template-columns:1fr}.workgrid{grid-template-columns:1fr}.metricrow{grid-template-columns:1fr 1fr}.pricing{grid-template-columns:1fr}.section{padding:50px 0}.nav{height:68px}}@media(max-width:460px){.wrap{width:min(100% - 28px,1120px)}.metricrow{grid-template-columns:1fr}.hero-actions .btn{width:100%}h1{font-size:43px}.demo-card{padding:15px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8f5">
+  <title>MedSave — Medical bills, made clearer</title>
+  <style>
+    :root {
+      --bg: #f7f8f5;
+      --card: #ffffff;
+      --ink: #172b24;
+      --muted: #718078;
+      --green: #176b50;
+      --light: #e6f2e9;
+      --line: #e3e9e3;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    button, input, select { font: inherit; }
+    button, a { cursor: pointer; }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    header {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 21px;
+    }
+
+    .logo-icon {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--green);
+      color: white;
+    }
+
+    nav { display: flex; align-items: center; gap: 25px; }
+    nav a { color: var(--muted); font-size: 14px; }
+
+    .currency {
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .btn {
+      display: inline-block;
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 19px;
+      background: var(--green);
+      color: white;
+      font-weight: 700;
+      transition: transform .2s, opacity .2s;
+    }
+
+    .btn:hover { transform: translateY(-2px); opacity: .9; }
+
+    .btn-light {
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--ink);
+    }
+
+    .hero {
+      padding: 78px 0;
+      display: grid;
+      grid-template-columns: 1fr .9fr;
+      gap: 55px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 30px;
+      background: var(--light);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 22px 0;
+      font-size: clamp(42px, 5vw, 65px);
+      line-height: 1.07;
+      letter-spacing: -2.8px;
+    }
+
+    h1 span { color: var(--green); }
+
+    .lead {
+      max-width: 520px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 27px; }
+
+    .trust {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .bill-card {
+      padding: 27px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px #172b240c;
+    }
+
+    .card-top, .bill-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .card-top { margin-bottom: 22px; align-items: center; }
+
+    .muted { color: var(--muted); font-size: 13px; }
+
+    .sample {
+      padding: 5px 9px;
+      border-radius: 8px;
+      background: var(--light);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .bill-details {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+    }
+
+    .bill-row {
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .bill-row:last-child { border: 0; }
+    .bill-total { font-size: 27px; font-weight: 800; }
+
+    .tip {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 13px;
+      background: var(--light);
+      font-size: 13px;
+    }
+
+    section { padding: 65px 0; }
+
+    .section-heading {
+      max-width: 620px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      margin: 12px 0;
+      font-size: clamp(30px, 4vw, 43px);
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+    }
+
+    .section-heading p { color: var(--muted); }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 17px;
+    }
+
+    .feature {
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: white;
+      border-radius: 18px;
+    }
+
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 45px;
+      height: 45px;
+      background: var(--light);
+      border-radius: 13px;
+      font-size: 22px;
+    }
+
+    .feature p { color: var(--muted); font-size: 14px; }
+
+    #demo { background: #edf2ed; }
+
+    .demo-layout {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 35px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 25px;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .dropzone {
+      margin: 18px 0;
+      padding: 28px 15px;
+      border: 2px dashed #cbd8ce;
+      border-radius: 15px;
+      text-align: center;
+      background: #fafbf9;
+    }
+
+    .dropzone.dragging {
+      border-color: var(--green);
+      background: var(--light);
+    }
+
+    .dropzone p { color: var(--muted); font-size: 13px; }
+
+    input[type="file"] { max-width: 100%; font-size: 12px; }
+
+    .field { margin: 15px 0; }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .full { width: 100%; }
+
+    .results {
+      display: none;
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .result-item {
+      margin: 12px 0;
+      padding: 15px;
+      background: #f7f8f5;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    .result-item p { color: var(--muted); margin-bottom: 0; }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      max-width: 800px;
+    }
+
+    .price-card {
+      padding: 27px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: white;
+    }
+
+    .price-card.featured { border: 2px solid var(--green); }
+
+    .price {
+      margin: 15px 0;
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+    }
+
+    .price small { font-size: 14px; color: var(--muted); font-weight: 400; }
+
+    .price-card li { margin: 10px 0; color: var(--muted); font-size: 14px; }
+
+    footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .notice { font-size: 12px; color: var(--muted); }
+
+    @media (max-width: 800px) {
+      .hero, .demo-layout { grid-template-columns: 1fr; gap: 30px; }
+      .features { grid-template-columns: 1fr; }
+      nav { gap: 12px; }
+      nav a:not(.nav-button) { display: none; }
+      .hero { padding: 50px 0; }
+    }
+
+    @media (max-width: 500px) {
+      .container { width: calc(100% - 28px); }
+      .pricing { grid-template-columns: 1fr; }
+      h1 { font-size: 43px; letter-spacing: -2px; }
+      .currency { max-width: 115px; }
+      .panel, .bill-card { padding: 18px; }
+    }
+  </style>
 </head>
 <body>
-<div class="app">
-<header class="wrap nav"><a class="brand" href="#top" style="text-decoration:none;color:inherit"><div class="mark">↗</div><span>CareCompass</span></a><nav class="navlinks"><a href="#how">How it works</a><a href="#demo">Try the demo</a><a href="#pricing">Pricing</a><a class="navcta" href="#demo"><button class="btn">Check a bill ↗</button></a></nav></header>
-<main id="top">
-<section class="wrap hero"><div><div class="eyebrow"><span class="dot"></span> Your bill. Understood.</div><h1>Medical bills are complicated. <em>Clarity shouldn't be.</em></h1><p class="lead">CareCompass helps you spot charges worth questioning, understand insurance denials, and prepare a clear next step — without navigating the fine print alone.</p><div class="hero-actions"><a href="#demo"><button class="btn">Check a sample bill ↗</button></a><a href="#how"><button class="btn secondary">See how it works</button></a></div><div class="trust"><span><b class="check">✓</b> You stay in control</span><span><b class="check">✓</b> Clear, explainable flags</span><span><b class="check">✓</b> No guaranteed savings claims</span></div></div>
-<div class="demo-card"><div class="card-top"><div><div class="smallcaps">Sample bill review</div><strong style="font-size:20px">A clearer picture</strong></div><span class="pill">DEMO DATA</span></div><div class="bill"><div class="bill-head"><div><strong>Riverside Imaging Center</strong><small>Statement #CC-2048 · Sample patient</small></div><div class="amount">$684.00<small>AMOUNT DUE</small></div></div><div class="bill-line"><div>CT scan — abdomen <span>(74160)</span></div><b>$420.00</b></div><div class="bill-line"><div>Facility fee</div><b>$180.00</b></div><div class="bill-line"><div>Radiology interpretation</div><b>$84.00</b></div></div><div class="flag"><div class="flag-icon">!</div><div><strong>Possible duplicate to verify</strong><p>Two similar line items may warrant a closer look. This is a prompt to check the full statement — not proof of an error.</p></div></div><div class="flag" style="background:var(--green2)"><div class="flag-icon">↗</div><div><strong>Suggested next step</strong><p>Compare the itemized bill with your insurer's Explanation of Benefits (EOB).</p></div></div></div></section>
-<section class="section alt"><div class="wrap"><div class="section-head"><div class="eyebrow">The problem</div><h2>Three places where clarity gets lost.</h2><p>Medical bills, insurance paperwork, and provider prices can be difficult to compare. CareCompass makes the next step easier to understand.</p></div><div class="grid3"><article class="feature"><div class="ico">⌕</div><h3>Charges that need a second look</h3><p>Spot potential duplicate line items, unfamiliar codes, and charges that deserve a question to the provider.</p></article><article class="feature"><div class="ico">↺</div><h3>Denials with no clear next step</h3><p>Organize the denial reason, identify documents to gather, and draft a request for review using your plan details.</p></article><article class="feature"><div class="ico">◇</div><h3>Prices hidden until later</h3><p>Help people compare available in-network options and ask about estimated costs before planned care.</p></article></div></div></section>
-<section class="section" id="how"><div class="wrap"><div class="section-head"><div class="eyebrow">Simple by design</div><h2>From confusing paperwork to a clear action plan.</h2><p>CareCompass is designed to assist — not make decisions for you or promise that a dispute will succeed.</p></div><div class="workgrid"><div class="steps"><div class="step"><div class="num">1</div><div><h3>Add your documents</h3><p>Bill, Explanation of Benefits (EOB), or denial letter. The demo below uses sample data only.</p></div></div><div class="step"><div class="num">2</div><div><h3>Review potential issues</h3><p>See explainable flags and questions to verify against your actual documents and plan.</p></div></div><div class="step"><div class="num">3</div><div><h3>Prepare your next step</h3><p>Generate a draft message to the provider or insurer, then review and edit it yourself.</p></div></div><div class="step"><div class="num">4</div><div><h3>You decide what to send</h3><p>Nothing is sent automatically. Confirm details with your provider or insurer before acting.</p></div></div></div>
-<div class="audit" id="demo"><h3>Try the CareCompass demo</h3><p class="sub">Interactive prototype · sample analysis, not a real AI audit</p><div class="dropzone" id="dropzone"><div class="upload-icon">⇧</div><strong>Choose a document to attach</strong><p>PDF, JPG, or PNG · or drag a file here</p><label for="file" class="btn secondary" style="display:inline-block;margin-top:9px;padding:9px 13px;font-size:12px">Choose file</label><input class="file-input" type="file" id="file" accept=".pdf,.png,.jpg,.jpeg,image/*,application/pdf"><div class="selected-file" id="selectedFile"></div></div><div class="audit-options"><div class="field"><label for="billamount">Amount due (USD)</label><input id="billamount" type="number" min="0" value="684"></div><div class="field"><label for="doctype">Document type</label><input id="doctype" value="Medical bill" list="doctypes"><datalist id="doctypes"><option>Medical bill</option><option>Explanation of Benefits (EOB)</option><option>Denial letter</option></datalist></div></div><button class="btn full" id="analyze">Review sample bill ↗</button><p class="notice">For this prototype, the selected file is not uploaded or read. The results use illustrative sample data and are not a finding about your bill.</p><div class="results" id="results"><div class="result-head"><h4>Review summary</h4><span class="pill">SAMPLE REVIEW</span></div><div class="finding"><b>01 · Similar charge — verify</b><p>Check whether any repeated service lines represent separate services or a duplicate. Compare dates, codes, and quantities.</p></div><div class="finding"><b>02 · Insurance responsibility — confirm</b><p>Compare this balance with your EOB, including deductible, copay, coinsurance, and any non-covered amount.</p></div><div class="finding"><b>03 · Ask for an itemized statement</b><p>Request the detailed bill and confirm unfamiliar codes with the billing department.</p></div><div class="result-note">These are general review prompts, not confirmed errors. No savings are calculated or guaranteed.</div><button class="btn full" id="makeletter" style="margin-top:13px">Draft a question letter</button><div id="letterWrap" style="display:none"><div class="letter" id="letter"></div><button class="btn secondary full" id="copyletter" style="margin-top:9px">Copy draft</button></div></div></div></div></div></section>
-<section class="section alt"><div class="wrap"><div class="section-head"><div class="eyebrow">Built around trust</div><h2>Helpful by default. Honest about limits.</h2><p>People should be able to understand what the tool flagged, why it matters, and what still needs a human to verify.</p></div><div class="grid3"><article class="feature"><div class="ico">◎</div><h3>Explain every flag</h3><p>Show the reason and the document details behind a prompt, with uncertainty clearly labeled.</p></article><article class="feature"><div class="ico">♧</div><h3>Privacy first</h3><p>A production version needs secure processing, encryption, access controls, and a clear data-retention policy.</p></article><article class="feature"><div class="ico">✓</div><h3>Human approval</h3><p>Users review and approve drafts. CareCompass does not submit disputes or make coverage decisions for them.</p></article></div><div class="metricrow"><div class="metric"><strong>0 <em>auto-sends</em></strong><span>Every draft stays with the user</span></div><div class="metric"><strong>Explainable</strong><span>Flags are questions to verify, not verdicts</span></div><div class="metric"><strong>In progress</strong><span>Prototype concept — not a live billing service</span></div></div></div></section>
-<section class="section" id="pricing"><div class="wrap"><div class="section-head"><div class="eyebrow">A fair business model</div><h2>Pay for help, not another headache.</h2><p>Illustrative pricing concepts for the pitch — not an active offer. Real fees would need validation and legal review.</p></div><div class="pricing"><div class="pricecard"><span class="pill">START HERE</span><h3>Bill check</h3><div class="price">Free <small>/ sample review</small></div><p>Understand what to verify before contacting your provider.</p><ul><li>Basic document checklist</li><li>Potential issue prompts</li><li>Draft question letter</li></ul><button class="btn secondary full" onclick="document.querySelector('#demo').scrollIntoView({behavior:'smooth'})">Try the demo</button></div><div class="pricecard featured"><span class="pill">FUTURE MODEL</span><h3>Assisted dispute</h3><div class="price">Success fee <small>/ concept</small></div><p>A possible future model tied to verified savings, subject to feasibility and compliance review.</p><ul><li>More detailed document review</li><li>Appeal draft assistance</li><li>Clear explanation of next steps</li></ul><button class="btn full" onclick="showToast('This is a concept prototype — no paid service is available yet.')">Explore concept</button></div></div><p class="disclaimer">CareCompass is a concept prototype, not a healthcare provider, insurer, legal service, or live AI-powered auditor. It does not provide medical or legal advice. Never upload real medical documents to this demo. In a real product, handling health data would require appropriate security, privacy, and regulatory review. Pricing and success-fee rules vary by jurisdiction and must be validated before launch.</p></div></section>
-</main><footer class="footer"><div class="wrap footerin"><div class="brand"><div class="mark">↗</div><span>CareCompass</span></div><span>Make sense of your medical bill.</span><span>Prototype concept · 2026</span></div></footer><div class="toast" id="toast"></div></div>
+
+<header class="container">
+  <a class="logo" href="#">
+    <span class="logo-icon">↗</span>
+    BrightBill
+  </a>
+
+  <nav>
+    <select class="currency" id="currency" aria-label="Display currency">
+      <option value="AED">AED د.إ</option>
+      <option value="USD">USD $</option>
+      <option value="EUR">EUR €</option>
+      <option value="GBP">GBP £</option>
+      <option value="INR">INR ₹</option>
+    </select>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a class="nav-button" href="#demo"><span class="btn">Try demo ↗</span></a>
+  </nav>
+</header>
+
+<main>
+  <section class="container hero">
+    <div>
+      <span class="tag">HEALTHCARE BILLING, SIMPLIFIED</span>
+      <h1>Your medical bill. <span>Finally clear.</span></h1>
+      <p class="lead">
+        Understand healthcare charges, prepare questions about your bill,
+        and feel more confident navigating medical expenses.
+      </p>
+      <div class="actions">
+        <a class="btn" href="#demo">Explore the demo ↗</a>
+        <a class="btn btn-light" href="#how">How it works</a>
+      </div>
+      <p class="trust">✓ Clear explanations &nbsp; ✓ User stays in control &nbsp; ✓ UAE-focused</p>
+    </div>
+
+    <div class="bill-card">
+      <div class="card-top">
+        <div>
+          <strong>Example bill overview</strong>
+          <div class="muted">Illustrative information only</div>
+        </div>
+        <span class="sample">DEMO</span>
+      </div>
+
+      <div class="bill-details">
+        <div class="muted">Sample healthcare provider</div>
+        <strong>Outpatient consultation</strong>
+        <div class="bill-row"><span>Consultation</span><strong data-money="250">AED 250</strong></div>
+        <div class="bill-row"><span>Laboratory tests</span><strong data-money="180">AED 180</strong></div>
+        <div class="bill-row"><span>Other services</span><strong data-money="70">AED 70</strong></div>
+        <div class="bill-row">
+          <strong>Example total</strong>
+          <strong class="bill-total" data-money="500">AED 500</strong>
+        </div>
+      </div>
+
+      <div class="tip">
+        <strong>💡 A useful first step</strong>
+        <div>Request an itemized statement if you don't understand a charge.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" id="how">
+    <div class="section-heading">
+      <span class="tag">WHAT BRIGHTBILL DOES</span>
+      <h2>Less confusion. Better questions.</h2>
+      <p>Healthcare paperwork can be difficult to understand. BrightBill is designed to help you work through it one step at a time.</p>
+    </div>
+
+    <div class="features">
+      <article class="feature">
+        <div class="feature-icon">⌕</div>
+        <h3>Understand charges</h3>
+        <p>Get plain-language explanations of billing terms and identify questions worth asking your provider.</p>
+      </article>
+
+      <article class="feature">
+        <div class="feature-icon">↗</div>
+        <h3>Organize documents</h3>
+        <p>Bring your bills and insurance paperwork together for easier review.</p>
+      </article>
+
+      <article class="feature">
+        <div class="feature-icon">✉</div>
+        <h3>Prepare questions</h3>
+        <p>Draft a polite message requesting clarification or an itemized statement.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="demo">
+    <div class="container demo-layout">
+      <div>
+        <span class="tag">INTERACTIVE DEMO</span>
+        <h2>Let's look at a bill.</h2>
+        <p class="lead">Select a sample document and explore the prototype. This version does not read or analyze the document itself.</p>
+        <p class="notice">Use fictional documents only. Do not select real medical records in this prototype.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Bill review workspace</h3>
+        <p class="muted">Your file stays in your browser in this demo.</p>
+
+        <div class="dropzone" id="dropzone">
+          <div style="font-size:30px">⇧</div>
+          <strong>Select a bill or drag it here</strong>
+          <p>PDF, JPG, or PNG</p>
+          <input type="file" id="billFile" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/*">
+          <div id="fileName" class="notice"></div>
+        </div>
+
+        <div class="field">
+          <label for="amount">Amount due (<span id="currencyLabel">AED</span>)</label>
+          <input id="amount" type="number" min="0" placeholder="Enter a sample amount" value="500">
+        </div>
+
+        <div class="field">
+          <label for="documentType">What kind of document?</label>
+          <select id="documentType">
+            <option>Medical bill</option>
+            <option>Insurance statement</option>
+            <option>Payment notice</option>
+            <option>Other healthcare document</option>
+          </select>
+        </div>
+
+        <button class="btn full" id="reviewButton">Explore sample review ↗</button>
+
+        <div class="results" id="results">
+          <h3>Questions to consider</h3>
+          <div class="result-item">
+            <strong>01 — Check the itemized charges</strong>
+            <p>Ask for a breakdown of services, dates, quantities, and individual costs.</p>
+          </div>
+          <div class="result-item">
+            <strong>02 — Confirm insurance adjustments</strong>
+            <p>If applicable, compare the bill with your insurer's statement and ask how the balance was calculated.</p>
+          </div>
+          <div class="result-item">
+            <strong>03 — Ask about unfamiliar items</strong>
+            <p>Request an explanation from the billing department before assuming a charge is incorrect.</p>
+          </div>
+          <p id="summary" class="notice"></p>
+          <button class="btn btn-light full" id="draftButton">Create a question letter</button>
+          <div id="letterArea" style="display:none">
+            <div class="field">
+              <label for="letter">Editable message draft</label>
+              <textarea id="letter" rows="9" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px"></textarea>
+            </div>
+            <button class="btn full" id="copyButton">Copy draft</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" id="pricing">
+    <div class="section-heading">
+      <span class="tag">SIMPLE PRICING CONCEPT</span>
+      <h2>Start free. Get more guidance when you need it.</h2>
+      <p>These are proposed prices for a future product, not active subscriptions.</p>
+    </div>
+
+    <div class="pricing">
+      <div class="price-card">
+        <span class="tag">FREE</span>
+        <h3>BrightBill Starter</h3>
+        <div class="price">Free</div>
+        <p class="muted">Explore the concept without a subscription.</p>
+        <ul>
+          <li>Sample bill walkthrough</li>
+          <li>Basic billing checklist</li>
+          <li>Question letter template</li>
+        </ul>
+        <a href="#demo" class="btn btn-light">Try the demo</a>
+      </div>
+
+      <div class="price-card featured">
+        <span class="tag">PROPOSED PLAN</span>
+        <h3>BrightBill Plus</h3>
+        <div class="price"><span id="plusPrice">AED 19</span><small>/ month</small></div>
+        <p class="muted">A possible future plan for additional tools.</p>
+        <ul>
+          <li>More document organization</li>
+          <li>Additional message templates</li>
+          <li>Guided review checklists</li>
+        </ul>
+        <button class="btn" id="planButton">Explore Plus</button>
+      </div>
+    </div>
+    <p class="notice">No real subscriptions or payments are active.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="logo"><span class="logo-icon">↗</span> BrightBill</div>
+    <p>Make sense of your medical bill.</p>
+    <p class="notice">
+      BrightBill is a prototype, not a medical, legal, or insurance service.
+      It does not currently read bills or verify charges. All sample information
+      is fictional. Currency conversions are illustrative estimates.
+    </p>
+    <p>© 2026 BrightBill · Concept prototype</p>
+  </div>
+</footer>
+
 <script>
-const fileInput=document.getElementById('file'), selectedFile=document.getElementById('selectedFile'), dropzone=document.getElementById('dropzone');
-function showFile(file){if(!file)return;selectedFile.style.display='block';selectedFile.textContent='Attached for demo display: '+file.name+' · Not uploaded or analyzed';}
-fileInput.addEventListener('change',()=>showFile(fileInput.files[0]));
-['dragenter','dragover'].forEach(ev=>dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.classList.add('drag')}));
-['dragleave','drop'].forEach(ev=>dropzone.addEventListener(ev,e=>{e.preventDefault();dropzone.classList.remove('drag')}));
-dropzone.addEventListener('drop',e=>showFile(e.dataTransfer.files[0]));
-document.getElementById('analyze').addEventListener('click',()=>{const amount=Number(document.getElementById('billamount').value);if(!Number.isFinite(amount)||amount<0){showToast('Enter a valid amount first.');return;}document.getElementById('results').style.display='block';document.getElementById('results').scrollIntoView({behavior:'smooth',block:'nearest'});});
-document.getElementById('makeletter').addEventListener('click',()=>{const amount=Number(document.getElementById('billamount').value||0).toLocaleString('en-US',{style:'currency',currency:'USD'});const type=document.getElementById('doctype').value||'medical bill';document.getElementById('letter').textContent=`Subject: Request for itemized bill and review of charges\n\nHello Billing Team,\n\nI am contacting you about a ${type.toLowerCase()} showing a balance of ${amount}. I would appreciate your help understanding the charges before I make a payment.\n\nCould you please provide an itemized statement, confirm the service dates and billing codes for each line item, and check whether any similar charges may have been billed more than once? Please also explain how the balance was calculated after insurance, if applicable.\n\nIf any information needs correcting, please let me know what documentation you need and whether the account can be reviewed while this question is being investigated.\n\nThank you for your help,\n[Your name]\n[Account or statement number]`;document.getElementById('letterWrap').style.display='block';document.getElementById('letterWrap').scrollIntoView({behavior:'smooth',block:'nearest'});});
-document.getElementById('copyletter').addEventListener('click',async()=>{const value=document.getElementById('letter').textContent;try{await navigator.clipboard.writeText(value);showToast('Draft copied. Review and edit before sending.');}catch(e){const range=document.createRange();range.selectNodeContents(document.getElementById('letter'));const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);showToast('Select and copy the highlighted draft.');}});
-let toastTimer;function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3000)}
+  const currency = document.getElementById("currency");
+  const rates = {
+    AED: 1,
+    USD: 0.2723,
+    EUR: 0.251,
+    GBP: 0.216,
+    INR: 22.72
+  };
+
+  function formatMoney(aed) {
+    const code = currency.value;
+    return new Intl.NumberFormat("en", {
+      style: "currency",
+      currency: code,
+      maximumFractionDigits: code === "INR" ? 0 : 2
+    }).format(aed * rates[code]);
+  }
+
+  function updateCurrency() {
+    document.getElementById("currencyLabel").textContent = currency.value;
+    document.querySelectorAll("[data-money]").forEach(el => {
+      el.textContent = formatMoney(Number(el.dataset.money));
+    });
+
+    document.getElementById("plusPrice").textContent =
+      formatMoney(19);
+  }
+
+  currency.addEventListener("change", updateCurrency);
+  updateCurrency();
+
+  const fileInput = document.getElementById("billFile");
+  const fileName = document.getElementById("fileName");
+  const dropzone = document.getElementById("dropzone");
+
+  function showFile(file) {
+    if (!file) return;
+    const valid = /\.(pdf|png|jpe?g)$/i.test(file.name);
+    if (!valid) {
+      fileName.textContent = "Please select a PDF, JPG, or PNG file.";
+      return;
+    }
+    fileName.textContent =
+      "Selected: " + file.name +
+      ". This file is not uploaded or analyzed.";
+  }
+
+  fileInput.addEventListener("change", () => showFile(fileInput.files[0]));
+
+  ["dragenter", "dragover"].forEach(eventName => {
+    dropzone.addEventListener(eventName, event => {
+      event.preventDefault();
+      dropzone.classList.add("dragging");
+    });
+  });
+
+  ["dragleave", "drop"].forEach(eventName => {
+    dropzone.addEventListener(eventName, event => {
+      event.preventDefault();
+      dropzone.classList.remove("dragging");
+    });
+  });
+
+  dropzone.addEventListener("drop", event => {
+    showFile(event.dataTransfer.files[0]);
+  });
+
+  document.getElementById("reviewButton").addEventListener("click", () => {
+    const amount = Number(document.getElementById("amount").value);
+
+    if (!Number.isFinite(amount) || amount < 0) {
+      alert("Please enter a valid amount.");
+      return;
+    }
+
+    document.getElementById("summary").textContent =
+      "Entered amount: " + formatMoney(amount / rates[currency.value]) +
+      ". These are general prompts, not findings about your document.";
+
+    document.getElementById("results").style.display = "block";
+  });
+
+  document.getElementById("draftButton").addEventListener("click", () => {
+    const amount = Number(document.getElementById("amount").value);
+    const type = document.getElementById("documentType").value;
+
+    document.getElementById("letter").value =
+`Subject: Request for clarification about my healthcare bill
+
+Hello Billing Team,
+
+I am contacting you about a ${type.toLowerCase()} with a displayed balance of ${formatMoney(amount / rates[currency.value])}.
+
+Could you please provide an itemized breakdown of the charges and explain any unfamiliar items? If insurance was involved, I would also appreciate clarification of how the final balance was calculated.
+
+Please let me know if you need any further information to review my questions.
+
+Thank you for your help.
+
+Kind regards,
+[Your name]`;
+
+    document.getElementById("letterArea").style.display = "block";
+  });
+
+  document.getElementById("copyButton").addEventListener("click", async () => {
+    const letter = document.getElementById("letter");
+    try {
+      await navigator.clipboard.writeText(letter.value);
+      alert("Draft copied. Review it before sending.");
+    } catch {
+      letter.select();
+      alert("Copy the selected text manually.");
+    }
+  });
+
+  document.getElementById("planButton").addEventListener("click", () => {
+    alert("BrightBill Plus is a future pricing concept. Payments are not active yet.");
+  });
 </script>
-</body></html>
+</body>
+</html>
+
