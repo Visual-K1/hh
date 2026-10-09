@@ -4,17 +4,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f7f8f5">
-  <title>MedSave — Medical bills, made clearer</title>
+  <meta name="theme-color" content="#f5f8f5">
+  <meta name="description" content="MedSave helps you understand medical bills, identify charges to verify, and prepare questions for healthcare providers.">
+  <title>MedSave — Make sense of your medical bill</title>
+
   <style>
     :root {
-      --bg: #f7f8f5;
+      --bg: #f5f8f5;
       --card: #ffffff;
-      --ink: #172b24;
+      --soft: #eaf3ec;
+      --ink: #172c22;
       --muted: #718078;
-      --green: #176b50;
-      --light: #e6f2e9;
-      --line: #e3e9e3;
+      --line: #dce6de;
+      --green: #197451;
+      --green-dark: #10583d;
+      --lime: #d7f69b;
+      --warning: #fff2d8;
+      --shadow: 0 18px 50px #173e2510;
     }
 
     * { box-sizing: border-box; }
@@ -25,184 +31,296 @@
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font-family: Inter, Arial, sans-serif;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
       line-height: 1.6;
     }
 
-    button, input, select { font: inherit; }
-    button, a { cursor: pointer; }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    .wrap { width: min(1120px, calc(100% - 40px)); margin: auto; }
 
-    a { color: inherit; text-decoration: none; }
-
-    .container {
-      width: min(1120px, calc(100% - 40px));
-      margin: auto;
-    }
-
-    header {
-      height: 78px;
+    /* Logo and navigation */
+    .nav {
+      min-height: 78px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 20px;
       border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-size: 21px;
+      font-weight: 850;
+      letter-spacing: -1px;
+      white-space: nowrap;
     }
 
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 21px;
-    }
-
-    .logo-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: var(--green);
       display: grid;
       place-items: center;
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: var(--green);
-      color: white;
+      box-shadow: 0 6px 15px #19745130;
     }
 
-    nav { display: flex; align-items: center; gap: 25px; }
-    nav a { color: var(--muted); font-size: 14px; }
+    .logo svg { width: 29px; height: 29px; }
+
+    .brand-name span { color: var(--green); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 23px;
+    }
+
+    .nav-right a {
+      text-decoration: none;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .nav-right a:hover { color: var(--green); }
 
     .currency {
+      max-width: 175px;
       padding: 9px;
       border: 1px solid var(--line);
       border-radius: 10px;
-      background: white;
       color: var(--ink);
+      background: var(--card);
     }
 
     .btn {
-      display: inline-block;
       border: 0;
       border-radius: 12px;
-      padding: 13px 19px;
+      padding: 12px 18px;
       background: var(--green);
       color: white;
-      font-weight: 700;
-      transition: transform .2s, opacity .2s;
+      font-weight: 750;
+      transition: transform .2s, background .2s;
     }
 
-    .btn:hover { transform: translateY(-2px); opacity: .9; }
+    .btn:hover {
+      background: var(--green-dark);
+      transform: translateY(-2px);
+    }
 
-    .btn-light {
-      background: white;
-      border: 1px solid var(--line);
+    .btn.secondary {
       color: var(--ink);
+      background: var(--card);
+      border: 1px solid var(--line);
     }
 
+    .btn.secondary:hover { background: var(--soft); }
+    .full { width: 100%; }
+
+    /* Hero */
     .hero {
-      padding: 78px 0;
       display: grid;
-      grid-template-columns: 1fr .9fr;
-      gap: 55px;
+      grid-template-columns: 1.05fr .95fr;
       align-items: center;
+      gap: 55px;
+      padding-top: 76px;
+      padding-bottom: 78px;
     }
 
-    .tag {
-      display: inline-block;
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 7px 12px;
-      border-radius: 30px;
-      background: var(--light);
+      border: 1px solid #cfe4d5;
+      border-radius: 100px;
+      background: var(--soft);
       color: var(--green);
-      font-size: 12px;
-      font-weight: 800;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
     }
 
     h1 {
-      margin: 22px 0;
-      font-size: clamp(42px, 5vw, 65px);
-      line-height: 1.07;
-      letter-spacing: -2.8px;
+      max-width: 620px;
+      margin: 23px 0 20px;
+      font-size: clamp(43px, 5.3vw, 68px);
+      letter-spacing: -4px;
+      line-height: 1.04;
     }
 
-    h1 span { color: var(--green); }
+    h1 em {
+      color: var(--green);
+      font-style: normal;
+    }
 
     .lead {
-      max-width: 520px;
+      max-width: 550px;
       color: var(--muted);
       font-size: 17px;
+      line-height: 1.8;
     }
 
-    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 27px; }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 27px;
+    }
 
     .trust {
-      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 25px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
     }
 
+    .trust b { color: var(--green); }
+
+    /* Sample bill */
     .bill-card {
-      padding: 27px;
-      background: var(--card);
+      padding: 25px;
       border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: 0 20px 60px #172b240c;
+      border-radius: 25px;
+      background: var(--card);
+      box-shadow: var(--shadow);
     }
 
-    .card-top, .bill-row {
+    .bill-top {
       display: flex;
       justify-content: space-between;
-      gap: 15px;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
     }
 
-    .card-top { margin-bottom: 22px; align-items: center; }
+    .smallcaps {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
 
-    .muted { color: var(--muted); font-size: 13px; }
-
-    .sample {
-      padding: 5px 9px;
+    .pill {
+      padding: 6px 9px;
       border-radius: 8px;
-      background: var(--light);
+      background: var(--soft);
       color: var(--green);
-      font-size: 11px;
-      font-weight: 800;
+      font-size: 10px;
+      font-weight: 850;
     }
 
-    .bill-details {
+    .bill {
       padding: 18px;
       border: 1px solid var(--line);
-      border-radius: 15px;
+      border-radius: 17px;
+      background: var(--bg);
     }
 
-    .bill-row {
-      padding: 13px 0;
-      border-bottom: 1px solid var(--line);
-      font-size: 13px;
+    .bill-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 15px;
     }
 
-    .bill-row:last-child { border: 0; }
-    .bill-total { font-size: 27px; font-weight: 800; }
+    .bill-heading strong { font-size: 13px; }
+    .bill-heading small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
 
-    .tip {
-      margin-top: 15px;
-      padding: 15px;
+    .bill-total {
+      font-size: 23px;
+      font-weight: 850;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .bill-total small {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: 1px;
+    }
+
+    .bill-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+      font-size: 11px;
+    }
+
+    .bill-line span { color: var(--muted); }
+
+    .flag {
+      display: flex;
+      gap: 11px;
+      margin-top: 12px;
+      padding: 13px;
       border-radius: 13px;
-      background: var(--light);
-      font-size: 13px;
+      background: var(--warning);
+      font-size: 11px;
     }
 
-    section { padding: 65px 0; }
+    .flag.green { background: var(--soft); }
+    .flag strong { display: block; margin-bottom: 3px; }
+    .flag p { margin: 0; color: var(--muted); }
 
-    .section-heading {
-      max-width: 620px;
-      margin-bottom: 30px;
+    .flag-icon {
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      width: 27px;
+      height: 27px;
+      border-radius: 9px;
+      background: #ffffff99;
+      font-weight: 900;
     }
 
-    h2 {
-      margin: 12px 0;
-      font-size: clamp(30px, 4vw, 43px);
-      line-height: 1.15;
-      letter-spacing: -1.5px;
+    /* Sections */
+    .section { padding: 76px 0; }
+    .section.alt { background: #edf3ee; }
+
+    .section-head {
+      max-width: 680px;
+      margin-bottom: 32px;
     }
 
-    .section-heading p { color: var(--muted); }
+    .section-head h2 {
+      margin: 14px 0;
+      font-size: clamp(31px, 4vw, 45px);
+      line-height: 1.13;
+      letter-spacing: -2px;
+    }
 
-    .features {
+    .section-head p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .grid3 {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 17px;
@@ -211,8 +329,8 @@
     .feature {
       padding: 24px;
       border: 1px solid var(--line);
-      background: white;
       border-radius: 18px;
+      background: var(--card);
     }
 
     .feature-icon {
@@ -220,469 +338,807 @@
       place-items: center;
       width: 45px;
       height: 45px;
-      background: var(--light);
-      border-radius: 13px;
-      font-size: 22px;
+      margin-bottom: 17px;
+      border-radius: 14px;
+      background: var(--soft);
+      color: var(--green);
+      font-size: 23px;
     }
 
-    .feature p { color: var(--muted); font-size: 14px; }
+    .feature h3 { margin: 0 0 9px; font-size: 16px; }
+    .feature p { margin: 0; color: var(--muted); font-size: 13px; }
 
-    #demo { background: #edf2ed; }
-
-    .demo-layout {
+    /* How it works and demo */
+    .workgrid {
       display: grid;
-      grid-template-columns: .8fr 1.2fr;
-      gap: 35px;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 30px;
       align-items: start;
     }
 
-    .panel {
-      padding: 25px;
-      background: white;
+    .steps { display: grid; gap: 13px; }
+
+    .step {
+      display: flex;
+      gap: 13px;
+      padding: 17px;
       border: 1px solid var(--line);
-      border-radius: 20px;
+      border-radius: 15px;
+      background: var(--card);
     }
+
+    .number {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--green);
+      font-weight: 850;
+    }
+
+    .step h3 { margin: 0 0 4px; font-size: 14px; }
+    .step p { margin: 0; color: var(--muted); font-size: 12px; }
+
+    .audit {
+      padding: 25px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .audit h3 { margin: 0 0 3px; font-size: 21px; }
+    .sub { margin: 0 0 20px; color: var(--muted); font-size: 12px; }
 
     .dropzone {
-      margin: 18px 0;
-      padding: 28px 15px;
-      border: 2px dashed #cbd8ce;
-      border-radius: 15px;
+      padding: 25px 15px;
+      border: 1.5px dashed #aac9b4;
+      border-radius: 16px;
+      background: var(--bg);
       text-align: center;
-      background: #fafbf9;
     }
 
-    .dropzone.dragging {
-      border-color: var(--green);
-      background: var(--light);
+    .dropzone.drag { background: var(--soft); border-color: var(--green); }
+    .upload-symbol { color: var(--green); font-size: 29px; }
+    .dropzone p { color: var(--muted); font-size: 11px; }
+    .file-input { display: none; }
+
+    .file-info {
+      display: none;
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 10px;
+      background: var(--soft);
+      overflow-wrap: anywhere;
+      font-size: 12px;
     }
 
-    .dropzone p { color: var(--muted); font-size: 13px; }
-
-    input[type="file"] { max-width: 100%; font-size: 12px; }
-
-    .field { margin: 15px 0; }
+    .fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
 
     .field label {
       display: block;
       margin-bottom: 6px;
-      font-size: 13px;
-      font-weight: 700;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 750;
     }
 
     .field input, .field select {
       width: 100%;
-      padding: 12px;
+      min-width: 0;
+      padding: 11px;
       border: 1px solid var(--line);
       border-radius: 10px;
-      background: white;
+      outline: none;
+      background: var(--bg);
       color: var(--ink);
     }
 
-    .full { width: 100%; }
+    .field input:focus, .field select:focus {
+      border-color: var(--green);
+    }
+
+    .notice {
+      margin: 13px 0 0;
+      padding: 11px;
+      border-radius: 10px;
+      background: var(--soft);
+      color: var(--muted);
+      font-size: 10px;
+    }
 
     .results {
       display: none;
-      margin-top: 22px;
-      padding-top: 20px;
+      margin-top: 20px;
+      padding-top: 18px;
       border-top: 1px solid var(--line);
     }
 
-    .result-item {
-      margin: 12px 0;
-      padding: 15px;
-      background: #f7f8f5;
+    .finding {
+      margin-top: 10px;
+      padding: 13px;
+      border: 1px solid var(--line);
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 12px;
     }
 
-    .result-item p { color: var(--muted); margin-bottom: 0; }
+    .finding p { margin: 4px 0 0; color: var(--muted); }
+
+    .letter {
+      width: 100%;
+      min-height: 250px;
+      margin-top: 12px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 12px;
+      line-height: 1.7;
+      resize: vertical;
+    }
+
+    /* Pricing */
+    .billing-toggle {
+      display: flex;
+      gap: 5px;
+      width: max-content;
+      margin-bottom: 22px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+    }
+
+    .billing-toggle button {
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .billing-toggle button.active {
+      background: var(--soft);
+      color: var(--green);
+    }
 
     .pricing {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
+      grid-template-columns: 1fr 1fr;
+      gap: 17px;
       max-width: 800px;
     }
 
     .price-card {
-      padding: 27px;
+      padding: 26px;
       border: 1px solid var(--line);
       border-radius: 20px;
-      background: white;
+      background: var(--card);
     }
 
     .price-card.featured { border: 2px solid var(--green); }
 
+    .price-card h3 { margin: 14px 0 0; }
+
     .price {
-      margin: 15px 0;
-      font-size: 38px;
-      font-weight: 800;
+      margin: 8px 0;
+      font-size: 36px;
+      font-weight: 850;
       letter-spacing: -1.5px;
     }
 
-    .price small { font-size: 14px; color: var(--muted); font-weight: 400; }
+    .price small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
 
-    .price-card li { margin: 10px 0; color: var(--muted); font-size: 14px; }
-
-    footer {
-      padding: 30px 0;
-      border-top: 1px solid var(--line);
+    .price-card p, .price-card li {
       color: var(--muted);
       font-size: 12px;
     }
 
-    .notice { font-size: 12px; color: var(--muted); }
+    .price-card ul { padding-left: 18px; line-height: 2.1; }
 
-    @media (max-width: 800px) {
-      .hero, .demo-layout { grid-template-columns: 1fr; gap: 30px; }
-      .features { grid-template-columns: 1fr; }
-      nav { gap: 12px; }
-      nav a:not(.nav-button) { display: none; }
-      .hero { padding: 50px 0; }
+    .faq { max-width: 800px; margin-top: 35px; }
+    .faq details { padding: 15px 0; border-bottom: 1px solid var(--line); }
+    .faq summary { cursor: pointer; font-weight: 750; }
+    .faq p { color: var(--muted); font-size: 13px; }
+
+    .disclaimer {
+      max-width: 850px;
+      margin-top: 25px;
+      color: var(--muted);
+      font-size: 10px;
     }
 
-    @media (max-width: 500px) {
-      .container { width: calc(100% - 28px); }
+    /* Footer and notifications */
+    footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 10;
+      bottom: 20px;
+      left: 50%;
+      max-width: calc(100% - 30px);
+      padding: 12px 17px;
+      border-radius: 12px;
+      background: var(--ink);
+      color: white;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 15px);
+      transition: .2s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; gap: 35px; padding-top: 50px; }
+      .workgrid { grid-template-columns: 1fr; }
+      .grid3 { grid-template-columns: 1fr; }
+      .nav-right { gap: 12px; }
+      .nav-right a:not(.navcta) { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 28px); }
+      .nav { min-height: 68px; }
+      .brand { font-size: 18px; }
+      .logo { width: 37px; height: 37px; }
+      .currency { max-width: 112px; font-size: 11px; }
+      h1 { font-size: 45px; letter-spacing: -2.5px; }
+      .section { padding: 52px 0; }
+      .bill-card, .audit { padding: 16px; }
       .pricing { grid-template-columns: 1fr; }
-      h1 { font-size: 43px; letter-spacing: -2px; }
-      .currency { max-width: 115px; }
-      .panel, .bill-card { padding: 18px; }
+      .fields { grid-template-columns: 1fr; }
+      .hero-actions .btn { width: 100%; }
+      .footer-row { align-items: flex-start; flex-direction: column; }
     }
   </style>
 </head>
+
 <body>
-
-<header class="container">
-  <a class="logo" href="#">
-    <span class="logo-icon">↗</span>
-    MedSave
-  </a>
-
-  <nav>
-    <select class="currency" id="currency" aria-label="Display currency">
-      <option value="AED">AED د.إ</option>
-      <option value="USD">USD $</option>
-      <option value="EUR">EUR €</option>
-      <option value="GBP">GBP £</option>
-      <option value="INR">INR ₹</option>
-    </select>
-    <a href="#how">How it works</a>
-    <a href="#pricing">Pricing</a>
-    <a class="nav-button" href="#demo"><span class="btn">Try demo ↗</span></a>
-  </nav>
-</header>
-
-<main>
-  <section class="container hero">
-    <div>
-      <span class="tag">HEALTHCARE BILLING, SIMPLIFIED</span>
-      <h1>Your medical bill. <span>Finally clear.</span></h1>
-      <p class="lead">
-        Understand healthcare charges, prepare questions about your bill,
-        and feel more confident navigating medical expenses.
-      </p>
-      <div class="actions">
-        <a class="btn" href="#demo">Explore the demo ↗</a>
-        <a class="btn btn-light" href="#how">How it works</a>
+  <header class="wrap nav" id="top">
+    <a class="brand" href="#top" aria-label="MedSave home">
+      <div class="logo">
+        <!-- Custom MedSave logo -->
+        <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <path d="M8 28V12L16 21L24 12V28"
+                stroke="white" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M25 25L29 29L35 21"
+                stroke="#D7F69B" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </div>
-      <p class="trust">✓ Clear explanations &nbsp; ✓ User stays in control &nbsp; ✓ UAE-focused</p>
-    </div>
+      <div class="brand-name">Med<span>Save</span></div>
+    </a>
 
-    <div class="bill-card">
-      <div class="card-top">
-        <div>
-          <strong>Example bill overview</strong>
-          <div class="muted">Illustrative information only</div>
-        </div>
-        <span class="sample">DEMO</span>
-      </div>
+    <nav class="nav-right" aria-label="Main navigation">
+      <select class="currency" id="currency" aria-label="Display currency">
+        <option value="AED">AED · Dirham</option>
+        <option value="USD">USD · Dollar</option>
+        <option value="EUR">EUR · Euro</option>
+        <option value="GBP">GBP · Pound</option>
+        <option value="INR">INR · Rupee</option>
+        <option value="SAR">SAR · Riyal</option>
+      </select>
+      <a href="#how">How it works</a>
+      <a href="#demo">Try the demo</a>
+      <a href="#pricing">Pricing</a>
+      <a class="navcta" href="#demo"><button class="btn">Get started ↗</button></a>
+    </nav>
+  </header>
 
-      <div class="bill-details">
-        <div class="muted">Sample healthcare provider</div>
-        <strong>Outpatient consultation</strong>
-        <div class="bill-row"><span>Consultation</span><strong data-money="250">AED 250</strong></div>
-        <div class="bill-row"><span>Laboratory tests</span><strong data-money="180">AED 180</strong></div>
-        <div class="bill-row"><span>Other services</span><strong data-money="70">AED 70</strong></div>
-        <div class="bill-row">
-          <strong>Example total</strong>
-          <strong class="bill-total" data-money="500">AED 500</strong>
-        </div>
-      </div>
-
-      <div class="tip">
-        <strong>💡 A useful first step</strong>
-        <div>Request an itemized statement if you don't understand a charge.</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="container" id="how">
-    <div class="section-heading">
-      <span class="tag">WHAT BRIGHTBILL DOES</span>
-      <h2>Less confusion. Better questions.</h2>
-      <p>Healthcare paperwork can be difficult to understand. BrightBill is designed to help you work through it one step at a time.</p>
-    </div>
-
-    <div class="features">
-      <article class="feature">
-        <div class="feature-icon">⌕</div>
-        <h3>Understand charges</h3>
-        <p>Get plain-language explanations of billing terms and identify questions worth asking your provider.</p>
-      </article>
-
-      <article class="feature">
-        <div class="feature-icon">↗</div>
-        <h3>Organize documents</h3>
-        <p>Bring your bills and insurance paperwork together for easier review.</p>
-      </article>
-
-      <article class="feature">
-        <div class="feature-icon">✉</div>
-        <h3>Prepare questions</h3>
-        <p>Draft a polite message requesting clarification or an itemized statement.</p>
-      </article>
-    </div>
-  </section>
-
-  <section id="demo">
-    <div class="container demo-layout">
+  <main>
+    <section class="wrap hero">
       <div>
-        <span class="tag">INTERACTIVE DEMO</span>
-        <h2>Let's look at a bill.</h2>
-        <p class="lead">Select a sample document and explore the prototype. This version does not read or analyze the document itself.</p>
-        <p class="notice">Use fictional documents only. Do not select real medical records in this prototype.</p>
+        <div class="eyebrow"><span class="dot"></span> Your bill. Understood.</div>
+        <h1>Medical bills are complicated. <em>Clarity shouldn't be.</em></h1>
+        <p class="lead">
+          MedSave helps you spot charges worth questioning, understand insurance
+          paperwork, and prepare your next step — without getting lost in the fine print.
+        </p>
+        <div class="hero-actions">
+          <a href="#demo"><button class="btn">Try the bill demo ↗</button></a>
+          <a href="#how"><button class="btn secondary">See how it works</button></a>
+        </div>
+        <div class="trust">
+          <span><b>✓</b> Clear explanations</span>
+          <span><b>✓</b> You stay in control</span>
+          <span><b>✓</b> No guaranteed-savings claims</span>
+        </div>
       </div>
 
-      <div class="panel">
-        <h3>Bill review workspace</h3>
-        <p class="muted">Your file stays in your browser in this demo.</p>
-
-        <div class="dropzone" id="dropzone">
-          <div style="font-size:30px">⇧</div>
-          <strong>Select a bill or drag it here</strong>
-          <p>PDF, JPG, or PNG</p>
-          <input type="file" id="billFile" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/*">
-          <div id="fileName" class="notice"></div>
+      <div class="bill-card">
+        <div class="bill-top">
+          <div>
+            <div class="smallcaps">Sample bill review</div>
+            <strong>A clearer picture</strong>
+          </div>
+          <span class="pill">DEMO DATA</span>
         </div>
 
-        <div class="field">
-          <label for="amount">Amount due (<span id="currencyLabel">AED</span>)</label>
-          <input id="amount" type="number" min="0" placeholder="Enter a sample amount" value="500">
-        </div>
-
-        <div class="field">
-          <label for="documentType">What kind of document?</label>
-          <select id="documentType">
-            <option>Medical bill</option>
-            <option>Insurance statement</option>
-            <option>Payment notice</option>
-            <option>Other healthcare document</option>
-          </select>
-        </div>
-
-        <button class="btn full" id="reviewButton">Explore sample review ↗</button>
-
-        <div class="results" id="results">
-          <h3>Questions to consider</h3>
-          <div class="result-item">
-            <strong>01 — Check the itemized charges</strong>
-            <p>Ask for a breakdown of services, dates, quantities, and individual costs.</p>
-          </div>
-          <div class="result-item">
-            <strong>02 — Confirm insurance adjustments</strong>
-            <p>If applicable, compare the bill with your insurer's statement and ask how the balance was calculated.</p>
-          </div>
-          <div class="result-item">
-            <strong>03 — Ask about unfamiliar items</strong>
-            <p>Request an explanation from the billing department before assuming a charge is incorrect.</p>
-          </div>
-          <p id="summary" class="notice"></p>
-          <button class="btn btn-light full" id="draftButton">Create a question letter</button>
-          <div id="letterArea" style="display:none">
-            <div class="field">
-              <label for="letter">Editable message draft</label>
-              <textarea id="letter" rows="9" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px"></textarea>
+        <div class="bill">
+          <div class="bill-heading">
+            <div>
+              <strong>Riverside Imaging Center</strong>
+              <small>Sample statement · MS-2048</small>
             </div>
-            <button class="btn full" id="copyButton">Copy draft</button>
+            <div class="bill-total" data-amount="684">
+              AED 684.00
+              <small>AMOUNT DUE</small>
+            </div>
+          </div>
+          <div class="bill-line"><span>CT scan — abdomen</span><b data-amount="420">AED 420.00</b></div>
+          <div class="bill-line"><span>Facility fee</span><b data-amount="180">AED 180.00</b></div>
+          <div class="bill-line"><span>Radiology interpretation</span><b data-amount="84">AED 84.00</b></div>
+        </div>
+
+        <div class="flag">
+          <div class="flag-icon">!</div>
+          <div>
+            <strong>Charge worth verifying</strong>
+            <p>Check similar line items against your itemized statement. Similar charges aren't automatically errors.</p>
+          </div>
+        </div>
+        <div class="flag green">
+          <div class="flag-icon">↗</div>
+          <div>
+            <strong>Your next step</strong>
+            <p>Compare the itemized bill with your insurer's Explanation of Benefits, if applicable.</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="container" id="pricing">
-    <div class="section-heading">
-      <span class="tag">SIMPLE PRICING CONCEPT</span>
-      <h2>Start free. Get more guidance when you need it.</h2>
-      <p>These are proposed prices for a future product, not active subscriptions.</p>
-    </div>
+    <section class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Why MedSave?</div>
+          <h2>Understand the bill before you pay it.</h2>
+          <p>Medical paperwork can be difficult to understand. MedSave helps you organise questions and identify what deserves a closer look.</p>
+        </div>
 
-    <div class="pricing">
-      <div class="price-card">
-        <span class="tag">FREE</span>
-        <h3>BrightBill Starter</h3>
-        <div class="price">Free</div>
-        <p class="muted">Explore the concept without a subscription.</p>
-        <ul>
-          <li>Sample bill walkthrough</li>
-          <li>Basic billing checklist</li>
-          <li>Question letter template</li>
-        </ul>
-        <a href="#demo" class="btn btn-light">Try the demo</a>
+        <div class="grid3">
+          <article class="feature">
+            <div class="feature-icon">⌕</div>
+            <h3>Check confusing charges</h3>
+            <p>Identify repeated line items, unfamiliar billing codes, and charges you may want to ask your provider about.</p>
+          </article>
+          <article class="feature">
+            <div class="feature-icon">↺</div>
+            <h3>Understand claim denials</h3>
+            <p>Organise denial reasons, gather relevant documents, and prepare questions about your insurer's decision.</p>
+          </article>
+          <article class="feature">
+            <div class="feature-icon">◇</div>
+            <h3>Ask about costs</h3>
+            <p>Prepare questions about estimated treatment costs and available payment options before planned care.</p>
+          </article>
+        </div>
       </div>
+    </section>
 
-      <div class="price-card featured">
-        <span class="tag">PROPOSED PLAN</span>
-        <h3>BrightBill Plus</h3>
-        <div class="price"><span id="plusPrice">AED 19</span><small>/ month</small></div>
-        <p class="muted">A possible future plan for additional tools.</p>
-        <ul>
-          <li>More document organization</li>
-          <li>Additional message templates</li>
-          <li>Guided review checklists</li>
-        </ul>
-        <button class="btn" id="planButton">Explore Plus</button>
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Simple by design</div>
+          <h2>From confusing paperwork to a clearer next step.</h2>
+          <p>MedSave is designed to help you ask better questions, not make healthcare or insurance decisions for you.</p>
+        </div>
+
+        <div class="workgrid">
+          <div class="steps">
+            <div class="step">
+              <div class="number">1</div>
+              <div><h3>Add your documents</h3><p>Start with a medical bill, insurance statement, or denial letter. This prototype does not upload or read documents.</p></div>
+            </div>
+            <div class="step">
+              <div class="number">2</div>
+              <div><h3>Review possible issues</h3><p>Explore general checks and questions to verify against your own paperwork.</p></div>
+            </div>
+            <div class="step">
+              <div class="number">3</div>
+              <div><h3>Prepare your questions</h3><p>Create an editable message for a billing department or insurer.</p></div>
+            </div>
+            <div class="step">
+              <div class="number">4</div>
+              <div><h3>You make the decision</h3><p>Review all details and confirm information with the relevant organisation before acting.</p></div>
+            </div>
+          </div>
+
+          <div class="audit" id="demo">
+            <h3>Try the MedSave demo</h3>
+            <p class="sub">Interactive prototype · sample prompts only</p>
+
+            <div class="dropzone" id="dropzone">
+              <div class="upload-symbol">⇧</div>
+              <strong>Choose a document</strong>
+              <p>PDF, JPG, or PNG · or drag a file here</p>
+              <label for="file" class="btn secondary" style="display:inline-block;padding:9px 13px;font-size:12px">Choose file</label>
+              <input class="file-input" id="file" type="file" accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/*">
+              <div class="file-info" id="fileInfo"></div>
+            </div>
+
+            <div class="fields">
+              <div class="field">
+                <label for="billAmount">Amount due (<span id="currencyLabel">AED</span>)</label>
+                <input id="billAmount" type="number" min="0" step="0.01" value="2500">
+              </div>
+              <div class="field">
+                <label for="docType">Document type</label>
+                <select id="docType">
+                  <option>Medical bill</option>
+                  <option>Insurance statement</option>
+                  <option>Claim denial letter</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn full" id="reviewBtn">Review sample bill ↗</button>
+            <p class="notice">Demo only: your file is not uploaded, read, or analysed. The results are general examples, not findings about your actual bill.</p>
+
+            <div class="results" id="results">
+              <div class="bill-top">
+                <strong>Review checklist</strong>
+                <span class="pill">SAMPLE</span>
+              </div>
+
+              <div class="finding">
+                <b>01 · Similar charges</b>
+                <p>Check whether repeated service lines refer to separate services or a possible duplicate.</p>
+              </div>
+              <div class="finding">
+                <b>02 · Insurance responsibility</b>
+                <p>Compare the balance with your insurance statement, including deductible, copay, and uncovered charges.</p>
+              </div>
+              <div class="finding">
+                <b>03 · Request an itemized bill</b>
+                <p>Ask for a detailed statement and an explanation of unfamiliar codes or fees.</p>
+              </div>
+
+              <p class="notice" id="reviewNote">These are general questions to verify, not confirmed billing errors. No savings are calculated or guaranteed.</p>
+              <button class="btn full" id="draftBtn" style="margin-top:12px">Create a question letter</button>
+              <textarea class="letter" id="letter" aria-label="Editable question letter" style="display:none"></textarea>
+              <button class="btn secondary full" id="copyBtn" style="display:none;margin-top:9px">Copy letter</button>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
+
+    <section class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Built around trust</div>
+          <h2>Helpful by default. Honest about limits.</h2>
+          <p>Understanding what needs to be checked matters more than making promises no tool can guarantee.</p>
+        </div>
+        <div class="grid3">
+          <article class="feature">
+            <div class="feature-icon">◎</div>
+            <h3>Clear explanations</h3>
+            <p>Understand why a charge might deserve a question and what information to verify.</p>
+          </article>
+          <article class="feature">
+            <div class="feature-icon">♧</div>
+            <h3>Privacy matters</h3>
+            <p>A production service would need appropriate security, access controls, and a clear data-retention policy.</p>
+          </article>
+          <article class="feature">
+            <div class="feature-icon">✓</div>
+            <h3>You stay in charge</h3>
+            <p>Review every draft yourself. MedSave does not automatically submit disputes or make coverage decisions.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="pricing">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">Simple pricing</div>
+          <h2>More clarity. Less confusion.</h2>
+          <p>These are proposed prices for the product concept. No subscriptions or payments are currently active.</p>
+        </div>
+
+        <div class="billing-toggle" aria-label="Billing frequency">
+          <button type="button" class="active" data-cycle="monthly">Monthly</button>
+          <button type="button" data-cycle="yearly">Yearly · Save 2 months</button>
+        </div>
+
+        <div class="pricing">
+          <article class="price-card">
+            <span class="pill">FREE PLAN</span>
+            <h3>MedSave Starter</h3>
+            <div class="price">Free <small>forever</small></div>
+            <p>Get started with helpful checklists and questions.</p>
+            <ul>
+              <li>Sample bill walkthrough</li>
+              <li>Basic billing checklist</li>
+              <li>Editable question letter</li>
+            </ul>
+            <button class="btn secondary full" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">Try the demo</button>
+          </article>
+
+          <article class="price-card featured">
+            <span class="pill">MORE GUIDANCE</span>
+            <h3>MedSave Plus</h3>
+            <div class="price"><span id="plusPrice">AED 19</span> <small id="pricePeriod">/ month</small></div>
+            <p>A proposed future plan for people who need more help organising billing questions.</p>
+            <ul>
+              <li>More review checklists</li>
+              <li>Multiple letter templates</li>
+              <li>Guided next-step planner</li>
+              <li>Organised drafts and notes</li>
+            </ul>
+            <button class="btn full" id="waitlistBtn">Join the waitlist</button>
+          </article>
+        </div>
+
+        <div class="faq">
+          <h3>Frequently asked questions</h3>
+          <details>
+            <summary>Does MedSave really analyse my bill?</summary>
+            <p>Not yet. This prototype does not upload or analyse files. The demo shows sample review prompts only.</p>
+          </details>
+          <details>
+            <summary>Can MedSave guarantee savings?</summary>
+            <p>No. It can help you organise questions, but it cannot guarantee that a charge is incorrect or that a dispute will succeed.</p>
+          </details>
+          <details>
+            <summary>Can I change the currency?</summary>
+            <p>Yes. Use the currency selector at the top. The conversion rates in this prototype are illustrative and are not live exchange rates.</p>
+          </details>
+          <details>
+            <summary>Can I pay for Plus right now?</summary>
+            <p>No. The pricing is a concept only. Payment processing and subscription features have not been implemented.</p>
+          </details>
+        </div>
+
+        <p class="disclaimer">
+          MedSave is a prototype concept, not a healthcare provider, insurer, legal service, or live AI-powered billing auditor. It does not provide medical or legal advice. Do not select real medical documents for this demo. No files are uploaded to a server. Proposed subscription prices and currency conversions are illustrative. A real launch would require appropriate privacy, security, legal, and regulatory review.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-row">
+      <a class="brand" href="#top" aria-label="MedSave home">
+        <div class="logo">
+          <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+            <path d="M8 28V12L16 21L24 12V28"
+                  stroke="white" stroke-width="4"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M25 25L29 29L35 21"
+                  stroke="#D7F69B" stroke-width="4"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-name">Med<span>Save</span></div>
+      </a>
+      <span>Make sense of your medical bill.</span>
+      <span>Prototype concept · 2026</span>
     </div>
-    <p class="notice">No real subscriptions or payments are active.</p>
-  </section>
-</main>
+  </footer>
 
-<footer>
-  <div class="container">
-    <div class="logo"><span class="logo-icon">↗</span> BrightBill</div>
-    <p>Make sense of your medical bill.</p>
-    <p class="notice">
-      BrightBill is a prototype, not a medical, legal, or insurance service.
-      It does not currently read bills or verify charges. All sample information
-      is fictional. Currency conversions are illustrative estimates.
-    </p>
-    <p>© 2026 BrightBill · Concept prototype</p>
-  </div>
-</footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script>
-  const currency = document.getElementById("currency");
-  const rates = {
-    AED: 1,
-    USD: 0.2723,
-    EUR: 0.251,
-    GBP: 0.216,
-    INR: 22.72
-  };
+  <script>
+    // Illustrative rates for the prototype only. Not live exchange rates.
+    const ratesFromAED = {
+      AED: 1,
+      USD: 0.2723,
+      EUR: 0.251,
+      GBP: 0.216,
+      INR: 22.72,
+      SAR: 1.0205
+    };
 
-  function formatMoney(aed) {
-    const code = currency.value;
-    return new Intl.NumberFormat("en", {
-      style: "currency",
-      currency: code,
-      maximumFractionDigits: code === "INR" ? 0 : 2
-    }).format(aed * rates[code]);
-  }
+    const currency = document.getElementById('currency');
+    let billingCycle = 'monthly';
+    let toastTimer;
 
-  function updateCurrency() {
-    document.getElementById("currencyLabel").textContent = currency.value;
-    document.querySelectorAll("[data-money]").forEach(el => {
-      el.textContent = formatMoney(Number(el.dataset.money));
-    });
-
-    document.getElementById("plusPrice").textContent =
-      formatMoney(19);
-  }
-
-  currency.addEventListener("change", updateCurrency);
-  updateCurrency();
-
-  const fileInput = document.getElementById("billFile");
-  const fileName = document.getElementById("fileName");
-  const dropzone = document.getElementById("dropzone");
-
-  function showFile(file) {
-    if (!file) return;
-    const valid = /\.(pdf|png|jpe?g)$/i.test(file.name);
-    if (!valid) {
-      fileName.textContent = "Please select a PDF, JPG, or PNG file.";
-      return;
-    }
-    fileName.textContent =
-      "Selected: " + file.name +
-      ". This file is not uploaded or analyzed.";
-  }
-
-  fileInput.addEventListener("change", () => showFile(fileInput.files[0]));
-
-  ["dragenter", "dragover"].forEach(eventName => {
-    dropzone.addEventListener(eventName, event => {
-      event.preventDefault();
-      dropzone.classList.add("dragging");
-    });
-  });
-
-  ["dragleave", "drop"].forEach(eventName => {
-    dropzone.addEventListener(eventName, event => {
-      event.preventDefault();
-      dropzone.classList.remove("dragging");
-    });
-  });
-
-  dropzone.addEventListener("drop", event => {
-    showFile(event.dataTransfer.files[0]);
-  });
-
-  document.getElementById("reviewButton").addEventListener("click", () => {
-    const amount = Number(document.getElementById("amount").value);
-
-    if (!Number.isFinite(amount) || amount < 0) {
-      alert("Please enter a valid amount.");
-      return;
+    function moneyFromAED(amount, code = currency.value) {
+      return new Intl.NumberFormat('en', {
+        style: 'currency',
+        currency: code,
+        maximumFractionDigits: code === 'INR' ? 0 : 2
+      }).format(amount * ratesFromAED[code]);
     }
 
-    document.getElementById("summary").textContent =
-      "Entered amount: " + formatMoney(amount / rates[currency.value]) +
-      ". These are general prompts, not findings about your document.";
+    function refreshCurrency() {
+      const code = currency.value;
+      document.getElementById('currencyLabel').textContent = code;
 
-    document.getElementById("results").style.display = "block";
-  });
+      document.querySelectorAll('[data-amount]').forEach(element => {
+        const amount = Number(element.dataset.amount);
+        element.textContent = moneyFromAED(amount, code);
+      });
 
-  document.getElementById("draftButton").addEventListener("click", () => {
-    const amount = Number(document.getElementById("amount").value);
-    const type = document.getElementById("documentType").value;
+      const monthlyAED = 19;
+      const yearlyAED = 190;
+      const selectedPrice = billingCycle === 'monthly' ? monthlyAED : yearlyAED;
 
-    document.getElementById("letter").value =
-`Subject: Request for clarification about my healthcare bill
+      document.getElementById('plusPrice').textContent =
+        moneyFromAED(selectedPrice, code);
+
+      document.getElementById('pricePeriod').textContent =
+        billingCycle === 'monthly' ? '/ month' : '/ year';
+    }
+
+    currency.addEventListener('change', refreshCurrency);
+
+    document.querySelectorAll('[data-cycle]').forEach(button => {
+      button.addEventListener('click', () => {
+        billingCycle = button.dataset.cycle;
+
+        document.querySelectorAll('[data-cycle]').forEach(item => {
+          item.classList.toggle('active', item === button);
+        });
+
+        refreshCurrency();
+      });
+    });
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    // Local file selection only. Nothing is uploaded or analysed.
+    const fileInput = document.getElementById('file');
+    const fileInfo = document.getElementById('fileInfo');
+    const dropzone = document.getElementById('dropzone');
+
+    function showFile(file) {
+      if (!file) return;
+
+      const validType = [
+        'application/pdf', 'image/jpeg', 'image/png'
+      ].includes(file.type) || /\.(pdf|jpe?g|png)$/i.test(file.name);
+
+      if (!validType) {
+        showToast('Please choose a PDF, JPG, or PNG file.');
+        return;
+      }
+
+      fileInfo.style.display = 'block';
+      fileInfo.textContent =
+        file.name + ' — selected locally; not uploaded or analysed.';
+    }
+
+    fileInput.addEventListener('change', () => showFile(fileInput.files[0]));
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, event => {
+        event.preventDefault();
+        dropzone.classList.add('drag');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, event => {
+        event.preventDefault();
+        dropzone.classList.remove('drag');
+      });
+    });
+
+    dropzone.addEventListener('drop', event => {
+      showFile(event.dataTransfer.files[0]);
+    });
+
+    // Demonstration review using generic prompts only.
+    document.getElementById('reviewBtn').addEventListener('click', () => {
+      const amount = Number(document.getElementById('billAmount').value);
+
+      if (!Number.isFinite(amount) || amount < 0) {
+        showToast('Enter a valid bill amount first.');
+        return;
+      }
+
+      const code = currency.value;
+      const amountInAED = amount / ratesFromAED[code];
+
+      document.getElementById('reviewNote').textContent =
+        'Entered balance: ' + moneyFromAED(amountInAED, code) +
+        '. These are general review prompts, not confirmed errors. ' +
+        'No savings are calculated or guaranteed.';
+
+      document.getElementById('results').style.display = 'block';
+      document.getElementById('results').scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
+    });
+
+    // Create an editable draft.
+    document.getElementById('draftBtn').addEventListener('click', () => {
+      const amount = Number(document.getElementById('billAmount').value);
+      const type = document.getElementById('docType').value;
+      const amountInAED = amount / ratesFromAED[currency.value];
+      const formattedAmount = moneyFromAED(amountInAED, currency.value);
+
+      const draft =
+`Subject: Request for itemized bill and clarification of charges
 
 Hello Billing Team,
 
-I am contacting you about a ${type.toLowerCase()} with a displayed balance of ${formatMoney(amount / rates[currency.value])}.
+I am contacting you about a ${type.toLowerCase()} showing a balance of ${formattedAmount}. I would appreciate your help understanding the charges.
 
-Could you please provide an itemized breakdown of the charges and explain any unfamiliar items? If insurance was involved, I would also appreciate clarification of how the final balance was calculated.
+Could you please provide an itemized statement, confirm the service dates and billing codes for each line item, and check whether any similar charges may have been billed more than once?
 
-Please let me know if you need any further information to review my questions.
+If insurance applies, could you also explain how the remaining balance was calculated? Please let me know if you need any additional information from me.
 
 Thank you for your help.
 
 Kind regards,
-[Your name]`;
+[Your name]
+[Statement or account reference]`;
 
-    document.getElementById("letterArea").style.display = "block";
-  });
+      const letter = document.getElementById('letter');
+      letter.value = draft;
+      letter.style.display = 'block';
 
-  document.getElementById("copyButton").addEventListener("click", async () => {
-    const letter = document.getElementById("letter");
-    try {
-      await navigator.clipboard.writeText(letter.value);
-      alert("Draft copied. Review it before sending.");
-    } catch {
-      letter.select();
-      alert("Copy the selected text manually.");
-    }
-  });
+      const copyButton = document.getElementById('copyBtn');
+      copyButton.style.display = 'block';
 
-  document.getElementById("planButton").addEventListener("click", () => {
-    alert("BrightBill Plus is a future pricing concept. Payments are not active yet.");
-  });
-</script>
+      letter.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+      const letter = document.getElementById('letter');
+
+      try {
+        await navigator.clipboard.writeText(letter.value);
+        showToast('Draft copied! Review it before sending.');
+      } catch (error) {
+        letter.focus();
+        letter.select();
+        showToast('Draft selected. Press Ctrl+C to copy.');
+      }
+    });
+
+    document.getElementById('waitlistBtn').addEventListener('click', () => {
+      showToast('Thanks for your interest! Waitlist registration is not active yet.');
+    });
+
+    refreshCurrency();
+  </script>
 </body>
 </html>
-
